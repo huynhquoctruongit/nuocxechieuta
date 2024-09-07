@@ -1,101 +1,60 @@
-import Image from "next/image";
+"use client"
+import { Button } from "@/components/common/button-hero";
+import { useAuth } from "@/hooks/use-auth";
+import useHistory from "@/hooks/use-order";
+import { createLinkOrder, enumFood } from "@/lib/utils";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function Home() {
+const MainPage = () => {
+  const navigate = useRouter();
+  const { lastOrder } = useHistory();
+  const { isLogin } = useAuth();
+  const searchParams = useSearchParams()
+
+  const callback = searchParams.get("callback");
+  const { company, bulk_food_provider } = lastOrder || {};
+  useEffect(() => {
+    if (isLogin === false || !callback) return;
+    navigate.push(callback);
+  }, [isLogin]);
+
+  const onClick = () => {
+    navigate.push(createLinkOrder(company, bulk_food_provider));
+  };
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="absolute top-0 left-0 w-full h-full bg-pastel-pink/40 flex items-center justify-center">
+      <div className="p-4">
+        <div>
+          <img src="/images/not-found.png" className="w-60 mx-auto" alt="" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="text-[#4e4e4e] w-full md:w-96 text-xs md:text-base mx-auto mt-2 md:mt-10 text-center italic">
+          Chị Hồng đã dành nhiều thời gian để đặt đồ ăn trưa cho chúng mình ở công ty, lưu ý từng phần ăn, tổng hợp chi phí và
+          theo dõi việc thanh toán cho mọi người. Tụi mình được tạo ra để hỗ trợ chị Hồng, giúp công việc này trở nên nhanh chóng
+          và dễ dàng hơn.
+        </div>
+        <div className="flex items-center gap-4 justify-center mt-10">
+          {enumFood.slice(0, 4).map((item, index) => {
+            return (
+              <div
+                key={"login" + index}
+                className="rounded-md w-16 h-16 md:w-20 md:h-20 bg-pastel-pink/50 flex items-center cursor-pointer justify-center relative"
+              >
+                <img src={item} className="w-12 h-12 md:w-16 md:h-16" alt="" />
+              </div>
+            );
+          })}
+        </div>
+        {isLogin && company && (
+          <div className="text-center mt-10">
+            <Button variant="default" size="default" onClick={onClick}>
+              ĐẶT MÓN THÔI
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
+
+export default MainPage;
