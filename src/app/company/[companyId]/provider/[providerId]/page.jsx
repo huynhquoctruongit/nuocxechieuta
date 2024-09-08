@@ -1,8 +1,8 @@
 "use client"
 import { useEffect, useState } from "react";
-import { Button } from "@/components/common/button-hero.jsx";
+import { Button } from "@/components/common/button-hero";
 import { PresentationChartBarIcon } from "@heroicons/react/24/outline";
-import OCRComponent from "@/modules/order/screen";
+import OCRComponent from "@/modules/order/screen/index";
 import { mode } from "@/lib/config";
 import useSWR from "swr";
 import { useParams } from 'next/navigation'
